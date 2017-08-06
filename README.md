@@ -2,8 +2,6 @@
 
 A minimal starter project for modern webapps.
 
-Powered by [Webpack](https://webpack.js.org/)
-
 ## Usage
 
 1. Run `npm install` (or `yarn` if preferred)
