@@ -6,18 +6,33 @@ const base = require('./webpack.base');
 const CleanWebpack = require('clean-webpack-plugin');
 const ExtractText = require('extract-text-webpack-plugin');
 const extractStyles = new ExtractText({ filename: 'styles.css' });
+const extractVendor = new ExtractText({ filename: 'vendor.css' });
 
 module.exports = merge(base, {
-    entry: {
-        app: './src/main.js',
-        vendor: './src/vendor.js'
-    },
     output: {
-        chunkFilename: '[chunkhash].[name].js',
-        filename: '[name].[chunkhash].js'
+        chunkFilename: '[chunkhash:7].[name].js',
+        filename: '[name].[chunkhash:7].js'
     },
     module: {
         rules: [
+            {
+                test: /\.css$/,
+                use: extractVendor.extract(
+                    {
+                        use: [
+                            'css-loader?importLoaders=1',
+                            {
+                                loader: 'postcss-loader',
+                                options: {
+                                    ident: 'postcss',
+                                    plugins: () => [require('autoprefixer')({ browsers: ['last 2 versions', 'safari 8'] })]
+                                }
+                            }
+                        ],
+                        fallback: 'style-loader'
+                    }
+                )
+            },
             {
                 test: /\.scss$/,
                 use: extractStyles.extract(
@@ -36,7 +51,7 @@ module.exports = merge(base, {
                         fallback: 'style-loader'
                     }
                 )
-            },
+            }
         ]
     },
     plugins: [
@@ -44,16 +59,6 @@ module.exports = merge(base, {
         extractStyles,
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
-        }),
-        new webpack.LoaderOptionsPlugin({
-            minimize: true,
-            debug: false
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor'
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'runtime'
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
