@@ -7,14 +7,16 @@ module.exports = merge(base, {
     filename: '[name].js'
   },
   module: {
-    rules: [{
-      test: /\.css/,
-      use: ['style-loader', 'css-loader']
-    },
-    {
-      test: /\.scss/,
-      use: ['style-loader', 'css-loader', 'sass-loader']
-    }]
+    rules: [
+      {
+        test: /\.css/,
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.scss/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      }
+    ]
   },
   devtool: 'cheap-module-eval-source-map',
   devServer: {

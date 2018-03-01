@@ -4,11 +4,10 @@ const base = require('./webpack.base');
 
 const CleanWebpack = require('clean-webpack-plugin');
 const ExtractText = require('extract-text-webpack-plugin');
-const extractStyles = new ExtractText({
-  filename: 'styles.css'
-});
-const extractVendor = new ExtractText({
-  filename: 'vendor.css'
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+
+const autoprefixer = require('autoprefixer')({
+  browsers: ['last 2 versions', 'safari 8']
 });
 
 module.exports = merge(base, {
@@ -17,50 +16,30 @@ module.exports = merge(base, {
     filename: '[name].[chunkhash].js'
   },
   module: {
-    rules: [{
-      test: /\.css$/,
-      use: extractVendor.extract({
-        use: [
-          'css-loader?importLoaders=1',
-          {
-            loader: 'postcss-loader',
-            options: {
-              ident: 'postcss',
-              plugins: () => [require('autoprefixer')({
-                browsers: ['last 2 versions', 'safari 8']
-              })]
-            }
-          }
-        ],
-        fallback: 'style-loader'
-      })
-    },
-    {
-      test: /\.scss$/,
-      use: extractStyles.extract({
-        use: [
-          'css-loader?importLoaders=1',
-          {
-            loader: 'postcss-loader',
-            options: {
-              ident: 'postcss',
-              plugins: () => [require('autoprefixer')({
-                browsers: ['last 2 versions', 'safari 8']
-              })]
-            }
-          },
-          'sass-loader'
-        ],
-        fallback: 'style-loader'
-      })
-    }
+    rules: [
+      {
+        test: /\.s?css$/,
+        use: ExtractText.extract({
+          fallback: 'style-loader',
+          use: [
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: [autoprefixer]
+              }
+            },
+            'sass-loader'
+          ]
+        })
+      }
     ]
   },
   plugins: [
+    new ProgressBarPlugin(),
     new CleanWebpack(['dist'], {
       root: path.resolve(__dirname, '..')
     }),
-    extractStyles
+    new ExtractText('styles.css')
   ]
-
 });

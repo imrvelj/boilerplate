@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "author": "Ivan Mrvelj <ivan.mrvelj@protonmail.com>",
   "scripts": {
-    "build": "webpack --progress --config ./config/webpack.prod.js",
+    "build": "webpack --config ./config/webpack.prod.js",
     "start": "webpack-dev-server --progress --config ./config/webpack.dev.js"
   },
   "dependencies": {},
@@ -21,7 +21,7 @@
     "html-webpack-plugin": "webpack-contrib/html-webpack-plugin",
     "node-sass": "^4.6.1",
     "postcss-loader": "^2.0.8",
-    "preload-webpack-plugin": "^2.0.0",
+    "progress-bar-webpack-plugin": "^1.11.0",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.0",
     "webpack": "^4.0.0",
