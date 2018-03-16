@@ -1,8 +1,5 @@
 const path = require('path');
-const webpack = require('webpack');
 const HtmlWebpack = require('html-webpack-plugin');
-
-const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
   entry: {
@@ -19,6 +16,11 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
+      },
+      {
+        test: /\.worker\.js$/,
+        exclude: /node_modules/,
+        loader: 'worker-loader'
       }
     ]
   },
